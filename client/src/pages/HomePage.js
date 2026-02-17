@@ -181,7 +181,7 @@ function HomePage() {
                 <div className="photo-strip__track">
                     {[
                         {
-                            url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80",
+                            url: "/images/interior-1.jpg",
                             alt: "Спальня",
                         },
                         {

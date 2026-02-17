@@ -36,7 +36,7 @@ app.use("/api/admin", require("./routes/admin"))
 // ===== РАЗДАЧА ФРОНТЕНДА =====
 app.use(express.static(path.join(__dirname, "../client/build")))
 
-app.get("*", (req, res) => {
+app.get("/{*path}", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"))
 })
 
