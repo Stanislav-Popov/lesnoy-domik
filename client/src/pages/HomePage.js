@@ -94,17 +94,12 @@ function HomePage() {
                     <div className="about-grid">
                         <div className="about-grid__images">
                             <img
-                                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80"
+                                src="/images/house-2.webp"
                                 alt="Гостиная"
                                 className="about-grid__img about-grid__img--main"
                                 loading="lazy"
                             />
-                            <img
-                                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&q=80"
-                                alt="Терраса"
-                                className="about-grid__img about-grid__img--secondary"
-                                loading="lazy"
-                            />
+                            <img src="" alt="Терраса" className="/images/grill-3.webp" loading="lazy" />
                         </div>
                         <div className="about-grid__text">
                             <h3 className="about-grid__heading font-display">Ваш загородный дом мечты</h3>
