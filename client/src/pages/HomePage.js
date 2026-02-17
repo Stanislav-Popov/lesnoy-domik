@@ -181,35 +181,35 @@ function HomePage() {
                 <div className="photo-strip__track">
                     {[
                         {
-                            url: "/images/interior-1.jpg",
+                            url: "/images/badroom-1.webp",
                             alt: "Спальня",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80",
-                            alt: "Баня",
+                            url: "/images/porch-1.webp",
+                            alt: "Балкон",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&q=80",
+                            url: "/images/hallway-1.webp",
                             alt: "Лес",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80",
+                            url: "/images/house-1.webp",
                             alt: "Дом",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&q=80",
+                            url: "/images/kitchen-1.webp",
                             alt: "Кухня",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&q=80",
-                            alt: "Пруд",
-                        },
-                        {
-                            url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80",
+                            url: "/images/living-room-3.webp",
                             alt: "Гостиная",
                         },
                         {
-                            url: "https://images.unsplash.com/photo-1529543544282-ea51407b4bdc?w=500&q=80",
+                            url: "/images/living-room-1.webp",
+                            alt: "Гостиная",
+                        },
+                        {
+                            url: "/images/living-room-2.webp",
                             alt: "Отдых",
                         },
                     ].map((photo, i) => (
@@ -229,17 +229,17 @@ function HomePage() {
                     <div className="highlights">
                         {[
                             {
-                                img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+                                img: "/images/living-room-4.webp",
                                 title: "Просторная гостиная",
                                 text: "Большой зал с камином, мягкими диванами и панорамными окнами. Идеальное место для вечерних посиделок, настольных игр или просто тихого отдыха с книгой. Вечером потрескивание дров в камине создаёт неповторимую атмосферу уюта.",
                             },
                             {
-                                img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80",
+                                img: "",
                                 title: "Русская баня",
                                 text: "Дровяная баня с просторной парилкой, комнатой отдыха и купелью на свежем воздухе. Банные принадлежности, веники и полотенца включены. После парной — прыжок в пруд или просто отдых на террасе с травяным чаем.",
                             },
                             {
-                                img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80",
+                                img: "/images/grill-3.webp",
                                 title: "Терраса и барбекю",
                                 text: "Крытая терраса с большим обеденным столом на 20 человек, мангал и зона для барбекю. Проводите тёплые вечера на свежем воздухе под звёздным небом. Мы предоставляем уголь, решётки и всю необходимую посуду.",
                             },
@@ -311,7 +311,7 @@ function HomePage() {
                         <div className="contact-card">
                             <div className="contact-card__icon">✈️</div>
                             <div className="contact-card__label">Telegram</div>
-                            <strong>@lesnoy_domik</strong>
+                            <strong>@cozy_forest_house_</strong>
                         </div>
                         <div className="contact-card">
                             <div className="contact-card__icon">📍</div>

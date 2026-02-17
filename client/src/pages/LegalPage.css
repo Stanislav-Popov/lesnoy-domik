@@ -1,0 +1,154 @@
+/** @format */
+
+.legal-page {
+    padding-top: 100px;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.legal-container {
+    max-width: 800px;
+}
+
+.legal-card {
+    background: white;
+    border-radius: 16px;
+    padding: 48px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+.legal-card h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(24px, 5vw, 32px);
+    font-weight: 700;
+    color: var(--forest);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.legal-date {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 36px;
+}
+
+.legal-card h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--forest);
+    margin-top: 32px;
+    margin-bottom: 12px;
+}
+
+.legal-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.legal-card p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.legal-card ul,
+.legal-card ol {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-left: 24px;
+}
+
+.legal-card li {
+    margin-bottom: 6px;
+}
+
+.legal-card a {
+    color: var(--forest-light);
+    text-decoration: underline;
+}
+
+.legal-card a:hover {
+    color: var(--forest-lighter);
+}
+
+.legal-back {
+    display: block;
+    text-align: center;
+    margin-top: 32px;
+}
+
+/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+@media (max-width: 768px) {
+    .legal-page {
+        padding-top: 80px;
+        padding-bottom: 48px;
+    }
+
+    .legal-card {
+        padding: 24px 16px;
+        border-radius: 12px;
+    }
+
+    .legal-card h1 {
+        font-size: 22px;
+    }
+
+    .legal-card h2 {
+        font-size: 17px;
+        margin-top: 24px;
+    }
+
+    .legal-card h3 {
+        font-size: 15px;
+    }
+
+    .legal-card p,
+    .legal-card ul,
+    .legal-card ol {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .legal-card ul,
+    .legal-card ol {
+        padding-left: 18px;
+    }
+
+    .legal-date {
+        font-size: 12px;
+        margin-bottom: 24px;
+    }
+
+    .legal-back {
+        font-size: 14px;
+        padding: 12px 24px;
+    }
+}
+
+@media (max-width: 400px) {
+    .legal-card {
+        padding: 18px 12px;
+    }
+
+    .legal-card h1 {
+        font-size: 20px;
+    }
+
+    .legal-card h2 {
+        font-size: 16px;
+    }
+
+    .legal-card p,
+    .legal-card ul,
+    .legal-card ol {
+        font-size: 13px;
+    }
+}

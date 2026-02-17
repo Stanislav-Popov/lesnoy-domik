@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 import "./BookingPage.css"
 
 // Названия месяцев и дней на русском
@@ -38,6 +39,7 @@ function BookingPage() {
     const [name, setName] = useState("")
     const [phone, setPhone] = useState("")
     const [comment, setComment] = useState("")
+    const [consent, setConsent] = useState(false) // согласие на обработку ПД
     const [blockedDates, setBlockedDates] = useState([]) // занятые даты с сервера
     const [price, setPrice] = useState(null) // расчёт стоимости с сервера
     const [loading, setLoading] = useState(false)
@@ -299,6 +301,7 @@ function BookingPage() {
         setName("")
         setPhone("")
         setComment("")
+        setConsent(false)
         setPrice(null)
         setError("")
         // Перезагружаем занятые даты
@@ -435,25 +438,6 @@ function BookingPage() {
                     <div className="booking-card">
                         <h3 className="booking-card__title font-display">Данные гостя</h3>
 
-                        {/* Выбранные даты бронирования */}
-                        <div className="booking-dates-summary">
-                            <div className="booking-dates-summary__item">
-                                <span className="booking-dates-summary__label">Заезд</span>
-                                <span className="booking-dates-summary__value">{formatDate(checkIn)}</span>
-                            </div>
-                            <div className="booking-dates-summary__divider">→</div>
-                            <div className="booking-dates-summary__item">
-                                <span className="booking-dates-summary__label">Выезд</span>
-                                <span className="booking-dates-summary__value">{formatDate(checkOut)}</span>
-                            </div>
-                            {price && (
-                                <div className="booking-dates-summary__item">
-                                    <span className="booking-dates-summary__label">Ночей</span>
-                                    <span className="booking-dates-summary__value">{price.nights}</span>
-                                </div>
-                            )}
-                        </div>
-
                         <div className="form-group">
                             <label className="form-label">Имя</label>
                             <input
@@ -473,7 +457,6 @@ function BookingPage() {
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="+7 (999) 123-45-67"
                                 className="form-input"
-                                maxLength={18}
                             />
                         </div>
 
@@ -485,24 +468,7 @@ function BookingPage() {
                                     className="guest-counter__btn">
                                     −
                                 </button>
-                                <input
-                                    type="number"
-                                    min={1}
-                                    max={maxGuests}
-                                    value={guests}
-                                    onChange={(e) => {
-                                        const val = parseInt(e.target.value, 10)
-                                        if (!isNaN(val)) {
-                                            setGuests(Math.min(maxGuests, Math.max(1, val)))
-                                        } else if (e.target.value === "") {
-                                            setGuests("")
-                                        }
-                                    }}
-                                    onBlur={() => {
-                                        if (guests === "" || guests < 1) setGuests(1)
-                                    }}
-                                    className="guest-counter__input"
-                                />
+                                <span className="guest-counter__value">{guests}</span>
                                 <button
                                     onClick={() => setGuests(Math.min(maxGuests, guests + 1))}
                                     className="guest-counter__btn">
@@ -568,18 +534,37 @@ function BookingPage() {
 
                         {error && <div className="booking-error">{error}</div>}
 
+                        {/* Согласие на обработку персональных данных */}
+                        <div className="consent-group">
+                            <label className="consent-label">
+                                <input
+                                    type="checkbox"
+                                    checked={consent}
+                                    onChange={(e) => setConsent(e.target.checked)}
+                                    className="consent-checkbox"
+                                />
+                                <span className="consent-text">
+                                    Я соглашаюсь с{" "}
+                                    <Link to="/offer" target="_blank">условиями договора-оферты</Link>
+                                    {" "}и{" "}
+                                    <Link to="/privacy" target="_blank">политикой конфиденциальности</Link>,
+                                    а также даю согласие на обработку моих персональных данных
+                                </span>
+                            </label>
+                        </div>
+
                         <div className="booking-actions">
                             <button onClick={() => setStep(1)} className="btn-outline">
                                 ← Назад
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                disabled={!name || !phone || loading}
+                                disabled={!name || !phone || !consent || loading}
                                 className="btn-primary"
                                 style={{
                                     padding: "12px 32px",
                                     fontSize: 15,
-                                    opacity: !name || !phone ? 0.4 : 1,
+                                    opacity: !name || !phone || !consent ? 0.4 : 1,
                                 }}>
                                 {loading ? "Отправка..." : "Забронировать →"}
                             </button>

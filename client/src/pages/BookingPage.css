@@ -248,73 +248,12 @@
     color: white;
 }
 
-.guest-counter__value,
-.guest-counter__input {
+.guest-counter__value {
     font-size: 24px;
     font-weight: 700;
     color: var(--forest);
     min-width: 40px;
     text-align: center;
-}
-
-.guest-counter__input {
-    width: 64px;
-    border: 1.5px solid rgba(139, 115, 85, 0.2);
-    border-radius: 10px;
-    padding: 4px 8px;
-    background: transparent;
-    outline: none;
-    -moz-appearance: textfield;
-}
-
-.guest-counter__input::-webkit-outer-spin-button,
-.guest-counter__input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.guest-counter__input:focus {
-    border-color: var(--forest-light);
-}
-
-/* ===== DATES SUMMARY (step 2) ===== */
-.booking-dates-summary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: var(--cream);
-    border-radius: 14px;
-    padding: 16px 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(139, 115, 85, 0.1);
-}
-
-.booking-dates-summary__item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.booking-dates-summary__label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.booking-dates-summary__value {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--forest);
-}
-
-.booking-dates-summary__divider {
-    font-size: 18px;
-    color: var(--muted);
-    margin-top: 14px;
 }
 
 /* ===== ÃƒÂÃ‚Â ÃƒÂÃ‚ÂÃƒÂÃ‚Â¡ÃƒÂÃ‚Â§ÃƒÂÃ‚ÂÃƒÂÃ‚Â¢ ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¢ÃƒÂÃ…Â¾ÃƒÂÃ‹Å“ÃƒÂÃ…â€œÃƒÂÃ…Â¾ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¢ÃƒÂÃ‹Å“ ===== */
@@ -368,6 +307,43 @@
 .price-prepay__value {
     font-size: 18px;
     font-weight: 700;
+}
+
+/* ===== CONSENT CHECKBOX ===== */
+.consent-group {
+    margin-bottom: 20px;
+    margin-top: 8px;
+}
+
+.consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.consent-checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    accent-color: var(--forest-light);
+    cursor: pointer;
+}
+
+.consent-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.consent-text a {
+    color: var(--forest-light);
+    text-decoration: underline;
+}
+
+.consent-text a:hover {
+    color: var(--forest-lighter);
 }
 
 /* ===== ÃƒÂÃ…Â¡ÃƒÂÃ‚ÂÃƒÂÃ…Â¾ÃƒÂÃ…Â¸ÃƒÂÃ…Â¡ÃƒÂÃ‹Å“ ===== */
@@ -553,6 +529,26 @@
 
     .confirm-row {
         font-size: 13px;
+    }
+
+    /* Чекбокс согласия */
+    .consent-text {
+        font-size: 12px;
+    }
+
+    /* Даты бронирования на шаге 2 */
+    .booking-dates-summary {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .booking-dates-summary__value {
+        font-size: 14px;
+    }
+
+    .booking-dates-summary__divider {
+        margin-top: 8px;
     }
 }
 

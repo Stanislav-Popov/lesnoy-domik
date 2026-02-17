@@ -9,6 +9,8 @@ import HomePage from "./pages/HomePage"
 import GalleryPage from "./pages/GalleryPage"
 import BookingPage from "./pages/BookingPage"
 import AdminPage from "./pages/AdminPage"
+import PrivacyPage from "./pages/PrivacyPage"
+import OfferPage from "./pages/OfferPage"
 import "./App.css"
 
 function ScrollToTop() {
@@ -29,6 +31,8 @@ function App() {
                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/booking" element={<BookingPage />} />
                 <Route path="/admin" element={<AdminPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/offer" element={<OfferPage />} />
             </Routes>
             <Footer />
         </BrowserRouter>
