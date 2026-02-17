@@ -1,0 +1,523 @@
+/** @format */
+
+.booking-page {
+    padding-top: 100px;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.booking-container {
+    max-width: 700px;
+}
+
+/* ===== ÃÅ¸ÃÂ ÃÅ¾Ãâ€œÃÂ Ãâ€¢ÃÂ¡ÃÂ¡ ===== */
+.progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 48px;
+}
+
+.progress__step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress__circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(139, 115, 85, 0.15);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.progress__circle--active {
+    background: var(--forest-light);
+    color: white;
+}
+
+.progress__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.progress__label--active {
+    color: var(--forest);
+}
+
+.progress__line {
+    width: 60px;
+    height: 2px;
+    background: rgba(139, 115, 85, 0.15);
+    margin: 0 12px;
+    transition: background 0.3s;
+}
+
+.progress__line--active {
+    background: var(--forest-light);
+}
+
+/* ===== ÃÅ¡ÃÂÃÂ ÃÂ¢ÃÅ¾ÃÂ§ÃÅ¡ÃÂ ===== */
+.booking-card {
+    background: var(--cream-white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+.booking-card__title {
+    font-size: 24px;
+    color: var(--forest);
+    margin-bottom: 28px;
+}
+
+/* ===== ÃÅ¡ÃÂÃâ€ºÃâ€¢ÃÂÃâ€ÃÂÃÂ ÃÂ¬ ===== */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.calendar-month {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--forest);
+}
+
+.calendar-nav {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.3s;
+}
+
+.calendar-nav:hover {
+    color: var(--forest-light);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-dayname {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calendar-day:hover:not(:disabled) {
+    background: rgba(46, 125, 79, 0.1);
+}
+
+.calendar-day--selected {
+    background: var(--forest-light) !important;
+    color: white !important;
+    font-weight: 700;
+}
+
+.calendar-day--range {
+    background: rgba(46, 125, 79, 0.12);
+}
+
+.calendar-day--disabled {
+    color: #ccc;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+.calendar-day--today {
+    box-shadow: inset 0 0 0 2px var(--forest-light);
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.calendar-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(139, 115, 85, 0.12);
+}
+
+.calendar-dates {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.calendar-dates strong {
+    color: var(--forest);
+}
+
+.calendar-nights {
+    color: var(--forest-light);
+    font-weight: 600;
+}
+
+/* ===== ÃÂ¤ÃÅ¾ÃÂ ÃÅ“ÃÂ ===== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(139, 115, 85, 0.2);
+    background: var(--cream);
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: var(--forest-light);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ===== ÃÂ¡ÃÂ§ÃÂÃÂ¢ÃÂ§ÃËœÃÅ¡ Ãâ€œÃÅ¾ÃÂ¡ÃÂ¢Ãâ€¢Ãâ„¢ ===== */
+.guest-counter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.guest-counter__btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid var(--forest-light);
+    background: transparent;
+    color: var(--forest-light);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.guest-counter__btn:hover {
+    background: var(--forest-light);
+    color: white;
+}
+
+.guest-counter__value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--forest);
+    min-width: 40px;
+    text-align: center;
+}
+
+/* ===== ÃÂ ÃÂÃÂ¡ÃÂ§ÃÂÃÂ¢ ÃÂ¡ÃÂ¢ÃÅ¾ÃËœÃÅ“ÃÅ¾ÃÂ¡ÃÂ¢ÃËœ ===== */
+.price-card {
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid rgba(139, 115, 85, 0.1);
+    margin-bottom: 24px;
+}
+
+.price-card__title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--forest);
+    margin-bottom: 16px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(139, 115, 85, 0.15);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--forest);
+}
+
+.price-total__value {
+    font-size: 20px;
+}
+
+.price-prepay {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--forest-light);
+}
+
+.price-prepay__value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ===== ÃÅ¡ÃÂÃÅ¾ÃÅ¸ÃÅ¡ÃËœ ===== */
+.booking-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.booking-error {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ===== ÃÅ¸ÃÅ¾Ãâ€ÃÂ¢Ãâ€™Ãâ€¢ÃÂ Ãâ€“Ãâ€Ãâ€¢ÃÂÃËœÃâ€¢ ===== */
+.success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(46, 125, 79, 0.1);
+    color: var(--forest-light);
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.confirm-details {
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: left;
+}
+
+.confirm-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(139, 115, 85, 0.08);
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.confirm-row:last-child {
+    border-bottom: none;
+}
+
+.confirm-row strong {
+    color: var(--forest);
+}
+
+/* =========================================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ========================================================= */
+@media (max-width: 768px) {
+    .booking-page {
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
+
+    .booking-card {
+        padding: 24px 16px;
+        border-radius: 16px;
+    }
+
+    .booking-card__title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Прогресс-бар */
+    .progress {
+        margin-bottom: 32px;
+    }
+
+    .progress__circle {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .progress__label {
+        font-size: 11px;
+    }
+
+    .progress__line {
+        width: 32px;
+        margin: 0 6px;
+    }
+
+    /* Календарь */
+    .calendar-month {
+        font-size: 18px;
+    }
+
+    .calendar-day {
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    .calendar-grid {
+        gap: 2px;
+    }
+
+    /* Подвал календаря — вертикально на мобильных */
+    .calendar-footer {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .calendar-dates {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+    }
+
+    .calendar-footer .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Форма */
+    .form-input {
+        font-size: 16px; /* предотвращает auto-zoom на iOS */
+    }
+
+    /* Счётчик гостей */
+    .guest-counter {
+        justify-content: center;
+    }
+
+    /* Расчёт стоимости */
+    .price-card {
+        padding: 18px 14px;
+    }
+
+    .price-row {
+        flex-direction: column;
+        gap: 2px;
+        font-size: 13px;
+    }
+
+    .price-total {
+        font-size: 15px;
+    }
+
+    .price-total__value {
+        font-size: 18px;
+    }
+
+    .price-prepay {
+        font-size: 13px;
+    }
+
+    .price-prepay__value {
+        font-size: 16px;
+    }
+
+    /* Кнопки действий */
+    .booking-actions {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .booking-actions .btn-primary,
+    .booking-actions .btn-outline {
+        width: 100%;
+        text-align: center;
+        padding: 14px 24px !important;
+    }
+
+    /* Подтверждение */
+    .confirm-details {
+        padding: 16px;
+    }
+
+    .confirm-row {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .booking-card {
+        padding: 20px 12px;
+    }
+
+    .progress__label {
+        display: none;
+    }
+
+    .progress__line {
+        width: 24px;
+        margin: 0 8px;
+    }
+
+    .calendar-month {
+        font-size: 16px;
+    }
+
+    .calendar-day {
+        font-size: 12px;
+    }
+
+    .calendar-dayname {
+        font-size: 10px;
+    }
+}

@@ -1,0 +1,714 @@
+/** @format */
+
+/* =========================================================
+   HERO — Анимированная лесная сцена
+   ========================================================= */
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 650px;
+    background: linear-gradient(180deg, #0a1a12 0%, #0d2818 30%, #112e1e 60%, #1b3a2d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Луна */
+.hero__moon {
+    position: absolute;
+    top: 8%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffeedd, #f5d9a8 50%, rgba(245, 217, 168, 0.2));
+    box-shadow:
+        0 0 40px 10px rgba(255, 238, 200, 0.15),
+        0 0 120px 40px rgba(255, 238, 200, 0.06);
+    z-index: 1;
+    animation: moonGlow 6s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+    0%,
+    100% {
+        box-shadow:
+            0 0 40px 10px rgba(255, 238, 200, 0.15),
+            0 0 120px 40px rgba(255, 238, 200, 0.06);
+    }
+    50% {
+        box-shadow:
+            0 0 60px 15px rgba(255, 238, 200, 0.22),
+            0 0 150px 50px rgba(255, 238, 200, 0.1);
+    }
+}
+
+/* Светлячки — НЕ двигаются при скролле (position: absolute внутри hero с overflow:hidden) */
+.hero__fireflies {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.hero__firefly {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #d4e89c;
+    box-shadow: 0 0 8px 3px rgba(212, 232, 156, 0.6);
+    animation: fireflyPulse linear infinite;
+    opacity: 0;
+    /* НЕТ transform-привязки к скроллу — только CSS-анимация пульсации */
+}
+
+@keyframes fireflyPulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    15% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scale(0.9);
+    }
+    85% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+/* ===== Слои деревьев (CSS-силуэты) ===== */
+.hero__trees {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    background-repeat: repeat-x;
+    background-position: bottom center;
+    background-size: cover;
+    will-change: transform;
+}
+
+/* Задний слой — далёкие деревья */
+.hero__trees--back {
+    height: 55%;
+    z-index: 1;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 400 L0 280 Q30 200 60 280 L60 260 Q80 160 100 260 L100 240 Q120 140 140 240 L140 280 Q160 200 180 280 L180 300 Q200 220 220 300 L220 250 Q240 120 260 250 L260 270 Q280 180 300 270 L300 260 Q320 150 340 260 L340 290 Q360 210 380 290 L380 240 Q400 100 420 240 L420 280 Q440 190 460 280 L460 270 Q480 160 500 270 L500 290 Q520 210 540 290 L540 250 Q560 130 580 250 L580 280 Q600 200 620 280 L620 260 Q640 140 660 260 L660 290 Q680 210 700 290 L700 240 Q720 110 740 240 L740 270 Q760 170 780 270 L780 280 Q800 190 820 280 L820 260 Q840 150 860 260 L860 290 Q880 210 900 290 L900 250 Q920 120 940 250 L940 280 Q960 190 980 280 L980 270 Q1000 160 1020 270 L1020 290 Q1040 210 1060 290 L1060 250 Q1080 130 1100 250 L1100 280 Q1120 200 1140 280 L1140 260 Q1160 150 1180 260 L1200 280 L1200 400Z' fill='%23091a10'/%3E%3C/svg%3E");
+}
+
+/* Средний слой */
+.hero__trees--mid {
+    height: 50%;
+    z-index: 2;
+    opacity: 0.6;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 400 L0 320 Q20 250 40 300 L40 240 Q55 140 70 240 L70 260 Q90 180 110 280 L110 300 Q130 220 150 300 L150 250 Q170 100 190 250 L190 280 Q210 200 230 280 L230 260 Q250 120 270 260 L270 300 Q290 230 310 300 L310 240 Q330 90 350 240 L350 280 Q370 190 390 280 L390 260 Q410 130 430 260 L430 290 Q450 210 470 290 L470 250 Q490 80 510 250 L510 280 Q530 190 550 280 L550 300 Q570 230 590 300 L590 240 Q610 100 630 240 L630 270 Q650 170 670 270 L670 290 Q690 210 710 290 L710 250 Q730 90 750 250 L750 280 Q770 190 790 280 L790 260 Q810 130 830 260 L830 300 Q850 230 870 300 L870 240 Q890 100 910 240 L910 280 Q930 200 950 280 L950 260 Q970 120 990 260 L990 290 Q1010 210 1030 290 L1030 250 Q1050 80 1070 250 L1070 280 Q1090 200 1110 280 L1110 300 Q1130 230 1150 300 L1150 260 Q1170 140 1190 260 L1200 280 L1200 400Z' fill='%230b2214'/%3E%3C/svg%3E");
+}
+
+/* Передний слой — ближние деревья */
+.hero__trees--front {
+    height: 40%;
+    z-index: 4;
+    opacity: 0.85;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 300 L0 250 Q15 200 30 240 L30 180 Q50 60 70 180 L70 220 Q85 170 100 230 L100 200 Q120 70 140 200 L140 240 Q160 190 180 240 L180 180 Q200 40 220 180 L220 220 Q240 160 260 220 L260 200 Q280 60 300 200 L300 240 Q320 190 340 240 L340 190 Q360 50 380 190 L380 230 Q400 170 420 230 L420 200 Q440 70 460 200 L460 240 Q480 190 500 240 L500 180 Q520 40 540 180 L540 220 Q560 160 580 230 L580 200 Q600 60 620 200 L620 240 Q640 190 660 240 L660 190 Q680 50 700 190 L700 230 Q720 170 740 230 L740 200 Q760 70 780 200 L780 240 Q800 190 820 240 L820 180 Q840 40 860 180 L860 220 Q880 160 900 220 L900 200 Q920 60 940 200 L940 240 Q960 190 980 240 L980 190 Q1000 50 1020 190 L1020 230 Q1040 170 1060 230 L1060 200 Q1080 70 1100 200 L1100 240 Q1120 190 1140 240 L1140 200 Q1160 60 1180 200 L1200 220 L1200 300Z' fill='%230e2a18'/%3E%3C/svg%3E");
+}
+
+/* Туман */
+.hero__mist {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    z-index: 5;
+    background: linear-gradient(to top, rgba(27, 58, 45, 0.9) 0%, rgba(27, 58, 45, 0.3) 40%, transparent);
+    pointer-events: none;
+}
+
+/* Контент героя */
+.hero__content {
+    position: relative;
+    z-index: 6;
+    text-align: center;
+    padding: 0 24px;
+    max-width: 650px;
+    will-change: transform, opacity;
+}
+
+.hero__subtitle {
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+    animation: fadeInUp 1s ease 0.2s both;
+}
+
+.hero__title {
+    font-size: clamp(36px, 8vw, 76px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    animation: fadeInUp 1s ease 0.4s both;
+    text-shadow: 0 2px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hero__line {
+    width: 60px;
+    height: 2px;
+    background: var(--forest-lighter);
+    margin: 24px auto;
+    animation: fadeInUp 1s ease 0.6s both;
+}
+
+.hero__desc {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.8;
+    margin-bottom: 36px;
+    animation: fadeInUp 1s ease 0.8s both;
+}
+
+.hero__btn {
+    animation: fadeInUp 1s ease 1s both;
+    box-shadow: 0 4px 30px rgba(46, 125, 79, 0.4);
+}
+
+/* Стрелка «листайте вниз» */
+.hero__scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeInUp 1s ease 1.4s both;
+}
+
+.hero__scroll-hint span {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.hero__scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    transform: rotate(45deg);
+    animation: scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+    0%,
+    100% {
+        transform: rotate(45deg) translateY(0);
+        opacity: 0.6;
+    }
+    50% {
+        transform: rotate(45deg) translateY(6px);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   СЕКЦИИ
+   ========================================================= */
+.section {
+    padding: 80px 24px;
+}
+
+.section--white {
+    background: var(--cream-white);
+}
+
+/* =========================================================
+   О ДОМЕ — фото + текст
+   ========================================================= */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.about-grid__images {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 12px;
+}
+
+.about-grid__img {
+    border-radius: 16px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.about-grid__img--main {
+    height: 340px;
+}
+
+.about-grid__img--secondary {
+    height: 340px;
+}
+
+.about-grid__heading {
+    font-size: 28px;
+    color: var(--forest);
+    margin-bottom: 20px;
+}
+
+.about-grid__text p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 14px;
+}
+
+/* =========================================================
+   ПРЕИМУЩЕСТВА
+   ========================================================= */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 28px 16px;
+    border-radius: 16px;
+    background: var(--cream-white);
+    border: 1px solid rgba(139, 115, 85, 0.1);
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.feature-card__emoji {
+    font-size: 36px;
+    margin-bottom: 14px;
+}
+
+.feature-card__title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--forest);
+    margin-bottom: 6px;
+}
+
+.feature-card__desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ФОТОЛЕНТА — бесконечная прокрутка
+   ========================================================= */
+.photo-strip {
+    overflow: hidden;
+    padding: 0;
+    background: var(--forest);
+}
+
+.photo-strip__track {
+    display: flex;
+    gap: 8px;
+    animation: photoScroll 40s linear infinite;
+    width: max-content;
+}
+
+.photo-strip__item {
+    flex-shrink: 0;
+    width: 280px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.photo-strip__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.photo-strip__item:hover img {
+    transform: scale(1.08);
+}
+
+@keyframes photoScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* =========================================================
+   ЧТО ВАС ЖДЁТ — фото/текст блоки
+   ========================================================= */
+.highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.highlight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.highlight--reverse {
+    direction: rtl;
+}
+
+.highlight--reverse > * {
+    direction: ltr;
+}
+
+.highlight__img-wrap {
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+}
+
+.highlight__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+}
+
+.highlight__img-wrap:hover img {
+    transform: scale(1.05);
+}
+
+.highlight__text h3 {
+    font-size: 26px;
+    color: var(--forest);
+    margin-bottom: 16px;
+}
+
+.highlight__text p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+/* =========================================================
+   ИНФОРМАЦИЯ
+   ========================================================= */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.info-card {
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(139, 115, 85, 0.12);
+    background: var(--cream-white);
+    transition: transform 0.3s;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+}
+
+.info-card__emoji {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.info-card__label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.info-card__value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--forest);
+}
+
+/* =========================================================
+   CTA — призыв к действию
+   ========================================================= */
+.cta-section {
+    position: relative;
+    padding: 80px 24px;
+    overflow: hidden;
+}
+
+.cta-section__bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--forest) 0%, #0d2818 100%);
+    z-index: 0;
+}
+
+.cta-section__bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath d='M0 200 L0 160 Q50 100 100 140 Q150 60 200 120 Q250 40 300 110 Q350 60 400 130 Q450 80 500 120 Q550 40 600 100 Q650 60 700 130 Q750 80 800 120 Q850 40 900 110 Q950 60 1000 130 Q1050 80 1100 120 Q1150 50 1200 100 L1200 200Z' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: bottom;
+}
+
+.cta-section__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.cta-section__title {
+    font-size: clamp(24px, 4vw, 40px);
+    color: white;
+    margin-bottom: 16px;
+}
+
+.cta-section__desc {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 32px;
+}
+
+/* =========================================================
+   КОНТАКТЫ
+   ========================================================= */
+.contacts-grid {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 0 auto 40px;
+    flex-wrap: wrap;
+}
+
+.contact-card {
+    text-align: center;
+    padding: 24px 28px;
+    border-radius: 16px;
+    background: var(--cream);
+    border: 1px solid rgba(139, 115, 85, 0.1);
+    min-width: 200px;
+    transition: transform 0.3s;
+}
+
+.contact-card:hover {
+    transform: translateY(-3px);
+}
+
+.contact-card__icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.contact-card__label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.contact-card strong {
+    font-size: 15px;
+    color: var(--forest);
+}
+
+/* Старый класс (для совместимости) */
+.map-placeholder {
+    height: 240px;
+    border-radius: 16px;
+    background: var(--forest);
+    opacity: 0.05;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+}
+
+/* =========================================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ========================================================= */
+@media (max-width: 900px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 100svh;
+    }
+
+    .hero__moon {
+        width: 50px;
+        height: 50px;
+        top: 12%;
+        right: 10%;
+    }
+
+    .hero__scroll-hint {
+        display: none;
+    }
+
+    .hero__desc br {
+        display: none;
+    }
+
+    .section {
+        padding: 56px 16px;
+    }
+
+    /* О доме */
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .about-grid__images {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-grid__img--main,
+    .about-grid__img--secondary {
+        height: 180px;
+    }
+
+    .about-grid__heading {
+        font-size: 24px;
+    }
+
+    /* Преимущества */
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .feature-card {
+        padding: 20px 12px;
+    }
+
+    .feature-card__emoji {
+        font-size: 28px;
+    }
+
+    /* Фотолента */
+    .photo-strip__item {
+        width: 200px;
+        height: 140px;
+    }
+
+    /* Что вас ждёт */
+    .highlight,
+    .highlight--reverse {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        direction: ltr;
+    }
+
+    .highlight__text h3 {
+        font-size: 22px;
+    }
+
+    /* Информация */
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .info-card {
+        padding: 18px 12px;
+    }
+
+    .info-card__value {
+        font-size: 18px;
+    }
+
+    /* CTA */
+    .cta-section {
+        padding: 56px 16px;
+    }
+
+    /* Контакты */
+    .contacts-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .contact-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 18px 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-grid__images {
+        grid-template-columns: 1fr;
+    }
+
+    .about-grid__img--main {
+        height: 200px;
+    }
+
+    .about-grid__img--secondary {
+        display: none;
+    }
+}

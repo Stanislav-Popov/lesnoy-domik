@@ -1,0 +1,328 @@
+/** @format */
+
+.admin-page {
+    padding-top: 100px;
+    min-height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 80px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 16px;
+}
+
+.admin-header h1 {
+    font-size: 28px;
+    color: var(--forest);
+}
+
+.admin-logout {
+    background: none;
+    border: 1px solid var(--wood);
+    color: var(--wood);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.admin-logout:hover {
+    background: var(--wood);
+    color: white;
+}
+
+/* Вкладки */
+.admin-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid rgba(139, 115, 85, 0.1);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.admin-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.admin-tab {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.admin-tab:hover {
+    color: var(--forest);
+}
+
+.admin-tab--active {
+    color: var(--forest-light);
+    border-bottom-color: var(--forest-light);
+}
+
+/* Логин */
+.admin-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.admin-login__form {
+    background: var(--cream-white);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 360px;
+}
+
+/* Бронирования */
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.booking-item {
+    background: var(--cream-white);
+    border-radius: 16px;
+    padding: 20px 24px;
+    border: 1px solid rgba(139, 115, 85, 0.1);
+}
+
+.booking-item__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.booking-item__phone {
+    color: var(--muted);
+    font-size: 13px;
+    margin-left: 12px;
+}
+
+.booking-item__status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.booking-item__details {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.booking-item__comment {
+    font-size: 13px;
+    color: var(--wood);
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+.booking-item__actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-small {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.btn-small:hover {
+    opacity: 0.8;
+}
+
+.btn-small--green {
+    background: rgba(46, 125, 79, 0.1);
+    color: var(--forest-light);
+}
+
+.btn-small--red {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
+/* Цены */
+.prices-form {
+    max-width: 500px;
+}
+
+.price-field {
+    margin-bottom: 20px;
+}
+
+.price-field__hint {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.save-success {
+    margin-left: 16px;
+    color: var(--forest-light);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Календарь админки */
+.admin-calendar {
+    max-width: 500px;
+}
+
+.admin-calendar-day {
+    font-weight: 500;
+}
+
+.admin-day--booked {
+    background: rgba(220, 38, 38, 0.15) !important;
+    color: #dc2626 !important;
+    font-weight: 700;
+}
+
+.admin-day--blocked {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #f59e0b !important;
+    font-weight: 700;
+}
+
+/* =========================================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ АДМИНКИ
+   ========================================================= */
+@media (max-width: 768px) {
+    .admin-page {
+        padding-top: 80px;
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 60px;
+    }
+
+    .admin-header h1 {
+        font-size: 22px;
+    }
+
+    .admin-logout {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    /* Вкладки — горизонтальный скролл */
+    .admin-tabs {
+        margin-bottom: 24px;
+    }
+
+    .admin-tab {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    /* Логин */
+    .admin-login__form {
+        padding: 28px 20px;
+        margin: 0 16px;
+    }
+
+    /* Карточки бронирований */
+    .booking-item {
+        padding: 16px;
+    }
+
+    .booking-item__header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .booking-item__phone {
+        margin-left: 0;
+        display: block;
+    }
+
+    .booking-item__details {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .booking-item__actions {
+        flex-wrap: wrap;
+    }
+
+    .btn-small {
+        padding: 8px 14px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
+
+    /* Цены */
+    .prices-form {
+        max-width: 100%;
+    }
+
+    .price-field .form-input {
+        max-width: 100% !important;
+    }
+
+    /* Календарь */
+    .admin-calendar {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .admin-header h1 {
+        font-size: 20px;
+    }
+
+    .admin-tab {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .booking-item__details {
+        font-size: 12px;
+    }
+}
