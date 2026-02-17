@@ -435,6 +435,25 @@ function BookingPage() {
                     <div className="booking-card">
                         <h3 className="booking-card__title font-display">Данные гостя</h3>
 
+                        {/* Выбранные даты бронирования */}
+                        <div className="booking-dates-summary">
+                            <div className="booking-dates-summary__item">
+                                <span className="booking-dates-summary__label">Заезд</span>
+                                <span className="booking-dates-summary__value">{formatDate(checkIn)}</span>
+                            </div>
+                            <div className="booking-dates-summary__divider">→</div>
+                            <div className="booking-dates-summary__item">
+                                <span className="booking-dates-summary__label">Выезд</span>
+                                <span className="booking-dates-summary__value">{formatDate(checkOut)}</span>
+                            </div>
+                            {price && (
+                                <div className="booking-dates-summary__item">
+                                    <span className="booking-dates-summary__label">Ночей</span>
+                                    <span className="booking-dates-summary__value">{price.nights}</span>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="form-group">
                             <label className="form-label">Имя</label>
                             <input
@@ -454,6 +473,7 @@ function BookingPage() {
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="+7 (999) 123-45-67"
                                 className="form-input"
+                                maxLength={18}
                             />
                         </div>
 
@@ -465,7 +485,24 @@ function BookingPage() {
                                     className="guest-counter__btn">
                                     −
                                 </button>
-                                <span className="guest-counter__value">{guests}</span>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={maxGuests}
+                                    value={guests}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value, 10)
+                                        if (!isNaN(val)) {
+                                            setGuests(Math.min(maxGuests, Math.max(1, val)))
+                                        } else if (e.target.value === "") {
+                                            setGuests("")
+                                        }
+                                    }}
+                                    onBlur={() => {
+                                        if (guests === "" || guests < 1) setGuests(1)
+                                    }}
+                                    className="guest-counter__input"
+                                />
                                 <button
                                     onClick={() => setGuests(Math.min(maxGuests, guests + 1))}
                                     className="guest-counter__btn">

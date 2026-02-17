@@ -10,7 +10,7 @@
     max-width: 700px;
 }
 
-/* ===== ÃÅ¸ÃÂ ÃÅ¾Ãâ€œÃÂ Ãâ€¢ÃÂ¡ÃÂ¡ ===== */
+/* ===== ÃƒÂÃ…Â¸ÃƒÂÃ‚Â ÃƒÂÃ…Â¾ÃƒÂÃ¢â‚¬Å“ÃƒÂÃ‚Â ÃƒÂÃ¢â‚¬Â¢ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¡ ===== */
 .progress {
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@
     background: var(--forest-light);
 }
 
-/* ===== ÃÅ¡ÃÂÃÂ ÃÂ¢ÃÅ¾ÃÂ§ÃÅ¡ÃÂ ===== */
+/* ===== ÃƒÂÃ…Â¡ÃƒÂÃ‚ÂÃƒÂÃ‚Â ÃƒÂÃ‚Â¢ÃƒÂÃ…Â¾ÃƒÂÃ‚Â§ÃƒÂÃ…Â¡ÃƒÂÃ‚Â ===== */
 .booking-card {
     background: var(--cream-white);
     border-radius: 20px;
@@ -79,7 +79,7 @@
     margin-bottom: 28px;
 }
 
-/* ===== ÃÅ¡ÃÂÃâ€ºÃâ€¢ÃÂÃâ€ÃÂÃÂ ÃÂ¬ ===== */
+/* ===== ÃƒÂÃ…Â¡ÃƒÂÃ‚ÂÃƒÂÃ¢â‚¬ÂºÃƒÂÃ¢â‚¬Â¢ÃƒÂÃ‚ÂÃƒÂÃ¢â‚¬ÂÃƒÂÃ‚ÂÃƒÂÃ‚Â ÃƒÂÃ‚Â¬ ===== */
 .calendar-header {
     display: flex;
     align-items: center;
@@ -185,7 +185,7 @@
     font-weight: 600;
 }
 
-/* ===== ÃÂ¤ÃÅ¾ÃÂ ÃÅ“ÃÂ ===== */
+/* ===== ÃƒÂÃ‚Â¤ÃƒÂÃ…Â¾ÃƒÂÃ‚Â ÃƒÂÃ…â€œÃƒÂÃ‚Â ===== */
 .form-group {
     margin-bottom: 20px;
 }
@@ -221,7 +221,7 @@
     min-height: 80px;
 }
 
-/* ===== ÃÂ¡ÃÂ§ÃÂÃÂ¢ÃÂ§ÃËœÃÅ¡ Ãâ€œÃÅ¾ÃÂ¡ÃÂ¢Ãâ€¢Ãâ„¢ ===== */
+/* ===== ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â§ÃƒÂÃ‚ÂÃƒÂÃ‚Â¢ÃƒÂÃ‚Â§ÃƒÂÃ‹Å“ÃƒÂÃ…Â¡ ÃƒÂÃ¢â‚¬Å“ÃƒÂÃ…Â¾ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¢ÃƒÂÃ¢â‚¬Â¢ÃƒÂÃ¢â€žÂ¢ ===== */
 .guest-counter {
     display: flex;
     align-items: center;
@@ -248,7 +248,8 @@
     color: white;
 }
 
-.guest-counter__value {
+.guest-counter__value,
+.guest-counter__input {
     font-size: 24px;
     font-weight: 700;
     color: var(--forest);
@@ -256,7 +257,67 @@
     text-align: center;
 }
 
-/* ===== ÃÂ ÃÂÃÂ¡ÃÂ§ÃÂÃÂ¢ ÃÂ¡ÃÂ¢ÃÅ¾ÃËœÃÅ“ÃÅ¾ÃÂ¡ÃÂ¢ÃËœ ===== */
+.guest-counter__input {
+    width: 64px;
+    border: 1.5px solid rgba(139, 115, 85, 0.2);
+    border-radius: 10px;
+    padding: 4px 8px;
+    background: transparent;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.guest-counter__input::-webkit-outer-spin-button,
+.guest-counter__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.guest-counter__input:focus {
+    border-color: var(--forest-light);
+}
+
+/* ===== DATES SUMMARY (step 2) ===== */
+.booking-dates-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(139, 115, 85, 0.1);
+}
+
+.booking-dates-summary__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.booking-dates-summary__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.booking-dates-summary__value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--forest);
+}
+
+.booking-dates-summary__divider {
+    font-size: 18px;
+    color: var(--muted);
+    margin-top: 14px;
+}
+
+/* ===== ÃƒÂÃ‚Â ÃƒÂÃ‚ÂÃƒÂÃ‚Â¡ÃƒÂÃ‚Â§ÃƒÂÃ‚ÂÃƒÂÃ‚Â¢ ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¢ÃƒÂÃ…Â¾ÃƒÂÃ‹Å“ÃƒÂÃ…â€œÃƒÂÃ…Â¾ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¢ÃƒÂÃ‹Å“ ===== */
 .price-card {
     background: var(--cream);
     border-radius: 14px;
@@ -309,7 +370,7 @@
     font-weight: 700;
 }
 
-/* ===== ÃÅ¡ÃÂÃÅ¾ÃÅ¸ÃÅ¡ÃËœ ===== */
+/* ===== ÃƒÂÃ…Â¡ÃƒÂÃ‚ÂÃƒÂÃ…Â¾ÃƒÂÃ…Â¸ÃƒÂÃ…Â¡ÃƒÂÃ‹Å“ ===== */
 .booking-actions {
     display: flex;
     justify-content: space-between;
@@ -325,7 +386,7 @@
     margin-bottom: 16px;
 }
 
-/* ===== ÃÅ¸ÃÅ¾Ãâ€ÃÂ¢Ãâ€™Ãâ€¢ÃÂ Ãâ€“Ãâ€Ãâ€¢ÃÂÃËœÃâ€¢ ===== */
+/* ===== ÃƒÂÃ…Â¸ÃƒÂÃ…Â¾ÃƒÂÃ¢â‚¬ÂÃƒÂÃ‚Â¢ÃƒÂÃ¢â‚¬â„¢ÃƒÂÃ¢â‚¬Â¢ÃƒÂÃ‚Â ÃƒÂÃ¢â‚¬â€œÃƒÂÃ¢â‚¬ÂÃƒÂÃ¢â‚¬Â¢ÃƒÂÃ‚ÂÃƒÂÃ‹Å“ÃƒÂÃ¢â‚¬Â¢ ===== */
 .success-icon {
     width: 72px;
     height: 72px;
@@ -365,7 +426,7 @@
 }
 
 /* =========================================================
-   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ÐœÐžÐ‘Ð˜Ð›Ð¬ÐÐÐ¯ ÐÐ”ÐÐŸÐ¢ÐÐ¦Ð˜Ð¯
    ========================================================= */
 @media (max-width: 768px) {
     .booking-page {
@@ -383,7 +444,7 @@
         margin-bottom: 20px;
     }
 
-    /* Прогресс-бар */
+    /* ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ-Ð±Ð°Ñ€ */
     .progress {
         margin-bottom: 32px;
     }
@@ -403,7 +464,7 @@
         margin: 0 6px;
     }
 
-    /* Календарь */
+    /* ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ */
     .calendar-month {
         font-size: 18px;
     }
@@ -417,7 +478,7 @@
         gap: 2px;
     }
 
-    /* Подвал календаря — вертикально на мобильных */
+    /* ÐŸÐ¾Ð´Ð²Ð°Ð» ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ñ â€” Ð²ÐµÑ€Ñ‚Ð¸ÐºÐ°Ð»ÑŒÐ½Ð¾ Ð½Ð° Ð¼Ð¾Ð±Ð¸Ð»ÑŒÐ½Ñ‹Ñ… */
     .calendar-footer {
         flex-direction: column;
         gap: 16px;
@@ -435,17 +496,17 @@
         text-align: center;
     }
 
-    /* Форма */
+    /* Ð¤Ð¾Ñ€Ð¼Ð° */
     .form-input {
-        font-size: 16px; /* предотвращает auto-zoom на iOS */
+        font-size: 16px; /* Ð¿Ñ€ÐµÐ´Ð¾Ñ‚Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ auto-zoom Ð½Ð° iOS */
     }
 
-    /* Счётчик гостей */
+    /* Ð¡Ñ‡Ñ‘Ñ‚Ñ‡Ð¸Ðº Ð³Ð¾ÑÑ‚ÐµÐ¹ */
     .guest-counter {
         justify-content: center;
     }
 
-    /* Расчёт стоимости */
+    /* Ð Ð°ÑÑ‡Ñ‘Ñ‚ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚Ð¸ */
     .price-card {
         padding: 18px 14px;
     }
@@ -472,7 +533,7 @@
         font-size: 16px;
     }
 
-    /* Кнопки действий */
+    /* ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ð¹ */
     .booking-actions {
         flex-direction: column-reverse;
         gap: 12px;
@@ -485,7 +546,7 @@
         padding: 14px 24px !important;
     }
 
-    /* Подтверждение */
+    /* ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ðµ */
     .confirm-details {
         padding: 16px;
     }

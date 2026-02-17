@@ -66,7 +66,6 @@ function Navbar() {
                     {[
                         { to: "/", label: "Главная" },
                         { to: "/gallery", label: "Галерея" },
-                        { to: "/booking", label: "Бронирование" },
                     ].map((item) => (
                         <Link
                             key={item.to}
@@ -80,7 +79,7 @@ function Navbar() {
 
                     <Link
                         to="/booking"
-                        className="btn-primary"
+                        className={`btn-primary ${location.pathname === "/booking" ? "navbar__link--active" : ""}`}
                         style={{ padding: "10px 24px", fontSize: "14px" }}>
                         Забронировать
                     </Link>
