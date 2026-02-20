@@ -309,17 +309,25 @@ function HomePage() {
                         <div className="contact-card">
                             <div className="contact-card__icon">📞</div>
                             <div className="contact-card__label">Телефон</div>
-                            <strong>+7 (999) 123-45-67</strong>
+                            <strong>+7 915 366 37 35</strong>
                         </div>
                         <div className="contact-card">
                             <div className="contact-card__icon">✈️</div>
                             <div className="contact-card__label">Telegram</div>
-                            <strong>@cozy_forest_house_</strong>
+                            <strong>
+                                <a
+                                    href="https://t.me/+79661136344"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="payment-cta__telegram">
+                                    Написать
+                                </a>
+                            </strong>
                         </div>
                         <div className="contact-card">
                             <div className="contact-card__icon">📍</div>
                             <div className="contact-card__label">Адрес</div>
-                            <strong>Московская обл., д. Лесная</strong>
+                            <strong>деревня Мешково, 173, Филимонковский район, Новомосковский административный округ, Москва</strong>
                         </div>
                     </div>
                     <YandexMap />

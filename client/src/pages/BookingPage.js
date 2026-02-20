@@ -619,8 +619,8 @@ function BookingPage() {
                                 className="payment-cta__telegram">
                                 ✈ Написать в Telegram
                             </a>
-                            <a href="tel:+79661136344" className="payment-cta__phone">
-                                📞 +7 966 113-63-44
+                            <a href="tel:+79153663735" className="payment-cta__phone">
+                                📞 +7 915 366 37 35
                             </a>
                             <p className="payment-cta__warning">
                                 ⏳ Даты временно забронированы. Если оплата не поступит в течение 24 часов,
