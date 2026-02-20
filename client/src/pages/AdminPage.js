@@ -274,16 +274,22 @@ function BookingsTab({ token }) {
         }
     }
 
-    // FIX: форматируем дату из строки "YYYY-MM-DD" (теперь гарантированно строка из db.js)
+    // FIX: форматируем дату из строки "YYYY-MM-DD"
     function formatDate(d) {
         if (!d) return "—"
         const s = String(d)
-        // "YYYY-MM-DD" → "DD.MM.YYYY"
         if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
             const parts = s.substring(0, 10).split("-")
             return `${parts[2]}.${parts[1]}.${parts[0]}`
         }
         return s
+    }
+
+    // Сколько часов прошло с момента создания
+    function hoursSinceCreation(createdAt) {
+        if (!createdAt) return 0
+        const created = new Date(createdAt)
+        return Math.round((Date.now() - created.getTime()) / (1000 * 60 * 60))
     }
 
     if (loading) return <p>Загрузка...</p>
@@ -320,12 +326,28 @@ function BookingsTab({ token }) {
                         </span>
                         <span>👥 {b.guest_count} гостей</span>
                         <span>💰 {Number(b.total_price).toLocaleString("ru")} ₽</span>
-                        <span>💳 Предоплата: {Number(b.prepayment).toLocaleString("ru")} ₽</span>
                     </div>
 
                     {b.comment && <div className="booking-item__comment">💬 {b.comment}</div>}
 
+                    {/* Предупреждение для PENDING */}
+                    {b.status === "PENDING" && (
+                        <div className="booking-item__pending-warning">
+                            ⏳ Ожидает оплаты ({hoursSinceCreation(b.created_at)} ч назад) — автоотмена через
+                            24 ч
+                        </div>
+                    )}
+
                     <div className="booking-item__actions">
+                        {/* PENDING → PAID (подтвердить получение предоплаты) */}
+                        {b.status === "PENDING" && (
+                            <button
+                                onClick={() => changeStatus(b.id, "PAID")}
+                                className="btn-small btn-small--green">
+                                💳 Оплата получена
+                            </button>
+                        )}
+                        {/* PAID → CONFIRMED */}
                         {b.status === "PAID" && (
                             <button
                                 onClick={() => changeStatus(b.id, "CONFIRMED")}
@@ -333,6 +355,7 @@ function BookingsTab({ token }) {
                                 ✓ Подтвердить
                             </button>
                         )}
+                        {/* Отмена (для любого не-отменённого) */}
                         {b.status !== "CANCELLED" && (
                             <button
                                 onClick={() => changeStatus(b.id, "CANCELLED")}
@@ -340,6 +363,7 @@ function BookingsTab({ token }) {
                                 ✕ Отменить
                             </button>
                         )}
+                        {/* Удаление (только отменённые) */}
                         {b.status === "CANCELLED" && (
                             <button onClick={() => deleteBooking(b.id)} className="btn-small btn-small--red">
                                 🗑 Удалить из списка
@@ -355,11 +379,14 @@ function BookingsTab({ token }) {
 // ===== ВКЛАДКА: ЦЕНЫ =====
 function PricesTab({ token }) {
     const [settings, setSettings] = useState({
-        base_price: 15000,
-        guest_surcharge: 500,
-        included_guests: 10,
-        prepay_percent: 30,
-        max_guests: 60,
+        weekday_price: 30000,
+        weekend_price: 50000,
+        guest_surcharge: 1000,
+        included_guests: 15,
+        max_guests: 30,
+        deposit: 30000,
+        cleaning_fee: 6000,
+        pending_cancel_hours: 24,
     })
     const [saved, setSaved] = useState(false)
     const [error, setError] = useState("")
@@ -402,19 +429,34 @@ function PricesTab({ token }) {
     }
 
     const fields = [
-        { key: "base_price", label: "Базовая цена за сутки (₽)", hint: "Стоимость аренды за одну ночь" },
+        {
+            key: "weekday_price",
+            label: "Цена за будни (пн–чт) (₽)",
+            hint: "Стоимость аренды за одну ночь в будни",
+        },
+        {
+            key: "weekend_price",
+            label: "Цена за выходные (пт–вс) (₽)",
+            hint: "Стоимость аренды за одну ночь в выходные",
+        },
         { key: "guest_surcharge", label: "Надбавка за гостя (₽)", hint: "За каждого гостя сверх включённых" },
         {
             key: "included_guests",
             label: "Гостей включено в цену",
             hint: "Сколько гостей входит в базовую цену",
         },
-        {
-            key: "prepay_percent",
-            label: "Процент предоплаты (%)",
-            hint: "Сколько % от суммы платит гость сразу",
-        },
         { key: "max_guests", label: "Максимум гостей", hint: "Ограничение на количество гостей" },
+        { key: "deposit", label: "Залог (₽)", hint: "Возвращается при отсутствии повреждений" },
+        {
+            key: "cleaning_fee",
+            label: "Доплата за уборку (₽)",
+            hint: "При сильном загрязнении после мероприятия",
+        },
+        {
+            key: "pending_cancel_hours",
+            label: "Автоотмена PENDING (часов)",
+            hint: "Через сколько часов отменять неоплаченные брони",
+        },
     ]
 
     return (
@@ -471,7 +513,6 @@ function CalendarTab({ token }) {
         }
     }
 
-    // Теперь d.date — гарантированно строка "YYYY-MM-DD" (фикс type parser в db.js)
     function isBlocked(day) {
         const dateStr = toLocalDateStr(month.getFullYear(), month.getMonth(), day)
         return blockedDates.some((d) => d.date === dateStr)
@@ -488,7 +529,6 @@ function CalendarTab({ token }) {
 
         try {
             if (info) {
-                // Разблокировать (только ручные, не привязанные к бронированию)
                 if (info.booking_id) {
                     alert("Эта дата привязана к бронированию. Отмените бронирование, чтобы разблокировать.")
                     return
@@ -500,7 +540,6 @@ function CalendarTab({ token }) {
                     },
                 })
             } else {
-                // Заблокировать
                 await fetch("/api/admin/blocked-dates", {
                     method: "POST",
                     headers: {

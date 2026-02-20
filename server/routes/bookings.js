@@ -9,7 +9,7 @@
 const express = require("express")
 const router = express.Router()
 const pool = require("../db")
-const { sendBookingNotification } = require("../telegram")
+const { sendBookingNotification, sendPendingWarning } = require("../telegram")
 
 // ===== Вспомогательная: загрузка настроек =====
 async function loadSettings(client) {
@@ -20,21 +20,48 @@ async function loadSettings(client) {
         settings[row.key] = Number(row.value)
     })
     return {
-        basePrice: settings.base_price || 15000,
-        guestSurcharge: settings.guest_surcharge || 500,
-        includedGuests: settings.included_guests || 10,
-        prepayPercent: settings.prepay_percent || 30,
-        maxGuests: settings.max_guests || 60,
+        weekdayPrice: settings.weekday_price || 30000,
+        weekendPrice: settings.weekend_price || 50000,
+        guestSurcharge: settings.guest_surcharge || 1000,
+        includedGuests: settings.included_guests || 15,
+        maxGuests: settings.max_guests || 30,
+        deposit: settings.deposit || 30000,
+        cleaningFee: settings.cleaning_fee || 6000,
+        pendingCancelHours: settings.pending_cancel_hours || 24,
     }
 }
 
 // FIX: Безопасное форматирование даты в "YYYY-MM-DD" в ЛОКАЛЬНОМ часовом поясе.
-// Нельзя использовать .toISOString() — она конвертирует в UTC и сдвигает дату.
 function toLocalDateStr(date) {
     const y = date.getFullYear()
     const m = String(date.getMonth() + 1).padStart(2, "0")
     const d = String(date.getDate()).padStart(2, "0")
     return `${y}-${m}-${d}`
+}
+
+// ===== Расчёт стоимости по дням (будни/выходные) =====
+// Пн=1, Вт=2, Ср=3, Чт=4 — будни; Пт=5, Сб=6, Вс=0 — выходные
+function calculateNightlyPrice(checkInDate, checkOutDate, weekdayPrice, weekendPrice) {
+    let totalBase = 0
+    let weekdayNights = 0
+    let weekendNights = 0
+    const current = new Date(checkInDate)
+    const end = new Date(checkOutDate)
+
+    while (current < end) {
+        const dow = current.getDay() // 0=Вс, 1=Пн, ..., 6=Сб
+        // Выходные: пятница(5), суббота(6), воскресенье(0)
+        if (dow === 5 || dow === 6 || dow === 0) {
+            totalBase += weekendPrice
+            weekendNights++
+        } else {
+            totalBase += weekdayPrice
+            weekdayNights++
+        }
+        current.setDate(current.getDate() + 1)
+    }
+
+    return { totalBase, weekdayNights, weekendNights, nights: weekdayNights + weekendNights }
 }
 
 // ===== Получить занятые даты =====
@@ -78,24 +105,35 @@ router.post("/calculate", async (req, res) => {
 
         const start = new Date(checkIn)
         const end = new Date(checkOut)
-        const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+
+        const { totalBase, weekdayNights, weekendNights, nights } = calculateNightlyPrice(
+            start,
+            end,
+            settings.weekdayPrice,
+            settings.weekendPrice,
+        )
 
         if (nights <= 0) {
             return res.status(400).json({ error: "Некорректные даты" })
         }
 
         const extraGuests = Math.max(0, parsedGuests - settings.includedGuests)
-        const totalPrice = nights * (settings.basePrice + extraGuests * settings.guestSurcharge)
-        const prepayment = Math.round((totalPrice * settings.prepayPercent) / 100)
+        const guestSurchargeTotal = extraGuests * settings.guestSurcharge * nights
+        const totalPrice = totalBase + guestSurchargeTotal
 
         res.json({
             nights,
-            basePrice: settings.basePrice,
+            weekdayNights,
+            weekendNights,
+            weekdayPrice: settings.weekdayPrice,
+            weekendPrice: settings.weekendPrice,
             extraGuests,
             guestSurcharge: settings.guestSurcharge,
+            guestSurchargeTotal,
             totalPrice,
-            prepayment,
-            prepayPercent: settings.prepayPercent,
+            deposit: settings.deposit,
+            cleaningFee: settings.cleaningFee,
+            includedGuests: settings.includedGuests,
             maxGuests: settings.maxGuests,
         })
     } catch (err) {
@@ -135,11 +173,6 @@ router.post("/", async (req, res) => {
             return res.status(400).json({ error: "Некорректные даты" })
         }
 
-        const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
-        if (nights <= 0) {
-            return res.status(400).json({ error: "Дата выезда должна быть позже даты заезда" })
-        }
-
         await client.query("BEGIN")
 
         const settings = await loadSettings(client)
@@ -159,9 +192,24 @@ router.post("/", async (req, res) => {
             return res.status(409).json({ error: "Выбранные даты уже заняты" })
         }
 
+        // Расчёт стоимости с учётом будней/выходных
+        const { totalBase, nights } = calculateNightlyPrice(
+            start,
+            end,
+            settings.weekdayPrice,
+            settings.weekendPrice,
+        )
+
+        if (nights <= 0) {
+            await client.query("ROLLBACK")
+            return res.status(400).json({ error: "Дата выезда должна быть позже даты заезда" })
+        }
+
         const extraGuests = Math.max(0, parsedGuests - settings.includedGuests)
-        const totalPrice = nights * (settings.basePrice + extraGuests * settings.guestSurcharge)
-        const prepayment = Math.round((totalPrice * settings.prepayPercent) / 100)
+        const guestSurchargeTotal = extraGuests * settings.guestSurcharge * nights
+        const totalPrice = totalBase + guestSurchargeTotal
+        // Предоплата = полная стоимость (оплата через Telegram/звонок)
+        const prepayment = totalPrice
 
         const result = await client.query(
             `INSERT INTO bookings (guest_name, phone, guest_count, check_in, check_out,
@@ -183,8 +231,6 @@ router.post("/", async (req, res) => {
         const booking = result.rows[0]
 
         // ===== БЛОКИРУЕМ ДАТЫ =====
-        // FIX: используем toLocalDateStr() вместо .toISOString().split("T")[0]
-        // toISOString() конвертирует в UTC → сдвигает дату на день назад в часовых поясах UTC+N
         const currentDate = new Date(start)
         while (currentDate < end) {
             const dateStr = toLocalDateStr(currentDate)
@@ -199,12 +245,17 @@ router.post("/", async (req, res) => {
 
         await client.query("COMMIT")
 
+        // Уведомление администратору о новом бронировании
         sendBookingNotification(booking)
+
+        // Уведомление: даты забронированы, но не оплачены + предупреждение об автоотмене
+        sendPendingWarning(booking, settings.pendingCancelHours)
 
         res.json({
             booking,
-            prepayment,
             totalPrice,
+            deposit: settings.deposit,
+            pendingCancelHours: settings.pendingCancelHours,
         })
     } catch (err) {
         await client.query("ROLLBACK")
@@ -214,5 +265,50 @@ router.post("/", async (req, res) => {
         client.release()
     }
 })
+
+// ===== АВТООТМЕНА: проверка просроченных PENDING бронирований =====
+// Запускается каждые 15 минут
+async function cancelExpiredPendingBookings() {
+    try {
+        const settings = await loadSettings()
+        const hours = settings.pendingCancelHours || 24
+
+        // Находим PENDING бронирования старше N часов
+        const expired = await pool.query(
+            `SELECT id, guest_name, check_in, check_out FROM bookings
+             WHERE status = 'PENDING'
+             AND created_at < NOW() - INTERVAL '1 hour' * $1`,
+            [hours],
+        )
+
+        for (const booking of expired.rows) {
+            const client = await pool.connect()
+            try {
+                await client.query("BEGIN")
+                await client.query("DELETE FROM blocked_dates WHERE booking_id = $1", [booking.id])
+                await client.query("UPDATE bookings SET status = 'CANCELLED' WHERE id = $1", [booking.id])
+                await client.query("COMMIT")
+                console.log(`⏰ Автоотмена PENDING бронирования: ${booking.guest_name} (${booking.id})`)
+            } catch (err) {
+                await client.query("ROLLBACK")
+                console.error("Ошибка автоотмены:", err)
+            } finally {
+                client.release()
+            }
+        }
+
+        if (expired.rows.length > 0) {
+            console.log(`⏰ Автоотменено бронирований: ${expired.rows.length}`)
+        }
+    } catch (err) {
+        console.error("Ошибка проверки автоотмены:", err)
+    }
+}
+
+// Запуск проверки каждые 15 минут
+setInterval(cancelExpiredPendingBookings, 15 * 60 * 1000)
+
+// Также запускаем сразу при старте сервера (через 10 сек, чтобы БД успела подключиться)
+setTimeout(cancelExpiredPendingBookings, 10 * 1000)
 
 module.exports = router

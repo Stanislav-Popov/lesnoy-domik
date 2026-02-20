@@ -44,7 +44,8 @@ function BookingPage() {
     const [price, setPrice] = useState(null) // расчёт стоимости с сервера
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
-    const [maxGuests, setMaxGuests] = useState(60) // FIX: загружается с сервера
+    const [maxGuests, setMaxGuests] = useState(30) // загружается с сервера
+    const [settings, setSettings] = useState(null) // все настройки
 
     // ===== ЗАГРУЗКА ЗАНЯТЫХ ДАТ =====
     useEffect(() => {
@@ -54,12 +55,14 @@ function BookingPage() {
             .catch(() => console.log("Не удалось загрузить даты"))
     }, [])
 
-    // ===== ЗАГРУЗКА НАСТРОЕК (max_guests) =====
+    // ===== ЗАГРУЗКА НАСТРОЕК =====
     useEffect(() => {
         fetch("/api/bookings/settings")
             .then((res) => res.json())
             .then((data) => {
+                setSettings(data)
                 if (data.maxGuests) setMaxGuests(data.maxGuests)
+                if (data.includedGuests) setGuests(Math.min(10, data.includedGuests))
             })
             .catch(() => console.log("Не удалось загрузить настройки"))
     }, [])
@@ -88,7 +91,6 @@ function BookingPage() {
         })
             .then((res) => res.json())
             .then((data) => {
-                // FIX: проверяем, что ответ не содержит ошибку
                 if (data.error) {
                     console.log("Ошибка расчёта:", data.error)
                     setPrice(null)
@@ -104,19 +106,15 @@ function BookingPage() {
 
     // ===== КАЛЕНДАРЬ: вспомогательные функции =====
 
-    // Сколько дней в месяце
     function getDaysInMonth(date) {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
     }
 
-    // Какой день недели у первого числа (0=Пн, 6=Вс)
     function getFirstDayOfWeek(date) {
         const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay()
-        return day === 0 ? 6 : day - 1 // переводим с Вс=0 на Пн=0
+        return day === 0 ? 6 : day - 1
     }
 
-    // Проверка: дата заблокирована?
-    // FIX: нельзя использовать toISOString() — она конвертирует в UTC и сдвигает дату
     function isBlocked(day) {
         const mm = String(month.getMonth() + 1).padStart(2, "0")
         const dd = String(day).padStart(2, "0")
@@ -124,7 +122,6 @@ function BookingPage() {
         return blockedDates.some((d) => d.startsWith(dateStr))
     }
 
-    // Проверка: есть ли заблокированные даты внутри диапазона [start, end)?
     function hasBlockedInRange(start, end) {
         const current = new Date(start)
         while (current < end) {
@@ -139,7 +136,6 @@ function BookingPage() {
         return false
     }
 
-    // Проверка: дата в прошлом?
     function isPast(day) {
         const date = new Date(month.getFullYear(), month.getMonth(), day)
         const today = new Date()
@@ -147,7 +143,6 @@ function BookingPage() {
         return date < today
     }
 
-    // Проверка: дата выбрана (заезд или выезд)?
     function isSelected(day) {
         const date = new Date(month.getFullYear(), month.getMonth(), day)
         return (
@@ -156,41 +151,34 @@ function BookingPage() {
         )
     }
 
-    // Проверка: дата в диапазоне между заездом и выездом?
     function isInRange(day) {
         if (!checkIn || !checkOut) return false
         const date = new Date(month.getFullYear(), month.getMonth(), day)
         return date > checkIn && date < checkOut
     }
 
-    // Клик по дню в календаре
     function handleDayClick(day) {
         const date = new Date(month.getFullYear(), month.getMonth(), day)
 
         if (!checkIn || (checkIn && checkOut)) {
-            // Первый клик (или перевыбор) — устанавливаем заезд
             setCheckIn(date)
             setCheckOut(null)
             setPrice(null)
             setError("")
         } else {
-            // Второй клик — устанавливаем выезд
             let start = checkIn
             let end = date
 
-            // FIX: нельзя выбрать тот же день — минимум 1 ночь
             if (start.getTime() === end.getTime()) {
                 setError("Минимальный срок бронирования — 1 ночь. Выберите другую дату выезда.")
                 return
             }
 
             if (end < start) {
-                // Если кликнули раньше заезда — меняем местами
                 start = date
                 end = checkIn
             }
 
-            // FIX: проверяем, нет ли заблокированных дат внутри выбранного диапазона
             if (hasBlockedInRange(start, end)) {
                 setError("В выбранном диапазоне есть занятые даты. Выберите другие даты.")
                 setCheckIn(null)
@@ -205,12 +193,9 @@ function BookingPage() {
         }
     }
 
-    // Переключение месяцев
-    // FIX: нельзя листать на месяцы в прошлом
     function prevMonth() {
         const now = new Date()
         const prev = new Date(month.getFullYear(), month.getMonth() - 1)
-        // Не уходим раньше текущего месяца
         if (
             prev.getFullYear() > now.getFullYear() ||
             (prev.getFullYear() === now.getFullYear() && prev.getMonth() >= now.getMonth())
@@ -222,7 +207,6 @@ function BookingPage() {
         setMonth(new Date(month.getFullYear(), month.getMonth() + 1))
     }
 
-    // Форматирование даты: 15.03.2026
     function formatDate(date) {
         if (!date) return "—"
         const d = date.getDate().toString().padStart(2, "0")
@@ -230,7 +214,6 @@ function BookingPage() {
         return `${d}.${m}.${date.getFullYear()}`
     }
 
-    // FIX: Правильное склонение слова «ночь» для всех чисел (включая 21, 22, 111 и т.д.)
     function nightsWord(n) {
         const abs = Math.abs(n) % 100
         const lastDigit = abs % 10
@@ -240,12 +223,10 @@ function BookingPage() {
         return "ночей"
     }
 
-    // Форматирование цены: 15 000
     function formatPrice(n) {
         return n?.toLocaleString("ru-RU") || "0"
     }
 
-    // FIX: Простая валидация телефона (минимум 10 цифр)
     function isPhoneValid(phoneStr) {
         const digits = phoneStr.replace(/\D/g, "")
         return digits.length >= 10
@@ -253,7 +234,6 @@ function BookingPage() {
 
     // ===== ОТПРАВКА БРОНИРОВАНИЯ =====
     async function handleSubmit() {
-        // FIX: валидация телефона на фронте
         if (!isPhoneValid(phone)) {
             setError("Укажите корректный номер телефона (минимум 10 цифр)")
             return
@@ -304,7 +284,6 @@ function BookingPage() {
         setConsent(false)
         setPrice(null)
         setError("")
-        // Перезагружаем занятые даты
         fetch("/api/bookings/availability")
             .then((res) => res.json())
             .then((data) => setBlockedDates(data.blockedDates || []))
@@ -351,6 +330,24 @@ function BookingPage() {
                 {/* ===== ШАГ 1: КАЛЕНДАРЬ ===== */}
                 {step === 1 && (
                     <div className="booking-card">
+                        {/* Информация о ценах */}
+                        {settings && (
+                            <div className="pricing-info">
+                                <div className="pricing-info__row">
+                                    <span>Будни (пн–чт)</span>
+                                    <strong>{formatPrice(settings.weekdayPrice)} ₽ / сутки</strong>
+                                </div>
+                                <div className="pricing-info__row">
+                                    <span>Выходные (пт–вс)</span>
+                                    <strong>{formatPrice(settings.weekendPrice)} ₽ / сутки</strong>
+                                </div>
+                                <div className="pricing-info__note">
+                                    До {settings.includedGuests} гостей включено • Залог{" "}
+                                    {formatPrice(settings.deposit)} ₽ (возвращается)
+                                </div>
+                            </div>
+                        )}
+
                         {/* Заголовок с переключением месяца */}
                         <div className="calendar-header">
                             <button onClick={prevMonth} className="calendar-nav">
@@ -475,6 +472,14 @@ function BookingPage() {
                                     +
                                 </button>
                             </div>
+                            {settings && guests > settings.includedGuests && (
+                                <span
+                                    className="form-hint"
+                                    style={{ color: "#f59e0b", fontSize: 13, marginTop: 4 }}>
+                                    +{formatPrice(settings.guestSurcharge)} ₽ за каждого гостя сверх{" "}
+                                    {settings.includedGuests}
+                                </span>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -493,44 +498,67 @@ function BookingPage() {
                             <div className="price-card">
                                 <div className="price-card__title">Расчёт стоимости</div>
 
-                                <div className="price-row">
-                                    <span>
-                                        Базовая цена: {formatPrice(price.basePrice)} ₽ × {price.nights}{" "}
-                                        {nightsWord(price.nights)}
-                                    </span>
-                                    <span>{formatPrice(price.basePrice * price.nights)} ₽</span>
-                                </div>
+                                {price.weekdayNights > 0 && (
+                                    <div className="price-row">
+                                        <span>
+                                            Будни: {formatPrice(price.weekdayPrice)} ₽ × {price.weekdayNights}{" "}
+                                            {nightsWord(price.weekdayNights)}
+                                        </span>
+                                        <span>{formatPrice(price.weekdayPrice * price.weekdayNights)} ₽</span>
+                                    </div>
+                                )}
+
+                                {price.weekendNights > 0 && (
+                                    <div className="price-row">
+                                        <span>
+                                            Выходные: {formatPrice(price.weekendPrice)} ₽ ×{" "}
+                                            {price.weekendNights} {nightsWord(price.weekendNights)}
+                                        </span>
+                                        <span>{formatPrice(price.weekendPrice * price.weekendNights)} ₽</span>
+                                    </div>
+                                )}
 
                                 {price.extraGuests > 0 && (
                                     <div className="price-row">
                                         <span>
-                                            Надбавка: {price.guestSurcharge} ₽ × {price.extraGuests} чел. ×{" "}
-                                            {price.nights} ноч.
+                                            Доп. гости: {formatPrice(price.guestSurcharge)} ₽ ×{" "}
+                                            {price.extraGuests} чел. × {price.nights} ноч.
                                         </span>
-                                        <span>
-                                            {formatPrice(
-                                                price.extraGuests * price.guestSurcharge * price.nights,
-                                            )}{" "}
-                                            ₽
-                                        </span>
+                                        <span>{formatPrice(price.guestSurchargeTotal)} ₽</span>
                                     </div>
                                 )}
 
                                 <div className="price-total">
-                                    <span>Итого</span>
+                                    <span>Итого за аренду</span>
                                     <span className="price-total__value">
                                         {formatPrice(price.totalPrice)} ₽
                                     </span>
                                 </div>
 
-                                <div className="price-prepay">
-                                    <span>Предоплата ({price.prepayPercent}%)</span>
-                                    <span className="price-prepay__value">
-                                        {formatPrice(price.prepayment)} ₽
+                                <div className="price-deposit">
+                                    <span>Залог (возвращается)</span>
+                                    <span className="price-deposit__value">
+                                        {formatPrice(price.deposit)} ₽
                                     </span>
                                 </div>
                             </div>
                         )}
+
+                        {/* Условия */}
+                        <div className="conditions-note">
+                            <p>
+                                📋 <strong>Условия бронирования:</strong>
+                            </p>
+                            <p>
+                                • Залог {formatPrice(settings?.deposit)} ₽ — возвращается при отсутствии
+                                повреждений
+                            </p>
+                            <p>
+                                • При сильном загрязнении — доплата {formatPrice(settings?.cleaningFee)} ₽ за
+                                уборку
+                            </p>
+                            <p>• Оплата производится через Telegram или по телефону</p>
+                        </div>
 
                         {error && <div className="booking-error">{error}</div>}
 
@@ -545,10 +573,14 @@ function BookingPage() {
                                 />
                                 <span className="consent-text">
                                     Я соглашаюсь с{" "}
-                                    <Link to="/offer" target="_blank">условиями договора-оферты</Link>
-                                    {" "}и{" "}
-                                    <Link to="/privacy" target="_blank">политикой конфиденциальности</Link>,
-                                    а также даю согласие на обработку моих персональных данных
+                                    <Link to="/offer" target="_blank">
+                                        условиями договора-оферты
+                                    </Link>{" "}
+                                    и{" "}
+                                    <Link to="/privacy" target="_blank">
+                                        политикой конфиденциальности
+                                    </Link>
+                                    , а также даю согласие на обработку моих персональных данных
                                 </span>
                             </label>
                         </div>
@@ -577,11 +609,24 @@ function BookingPage() {
                     <div className="booking-card" style={{ textAlign: "center" }}>
                         <div className="success-icon">✓</div>
                         <h3 className="booking-card__title font-display">Бронирование создано!</h3>
-                        <p style={{ color: "var(--muted)", marginBottom: 32 }}>
-                            Скоро мы свяжемся с вами для подтверждения.
-                            <br />
-                            Когда подключим оплату — здесь будет кнопка «Оплатить».
-                        </p>
+
+                        <div className="payment-cta">
+                            <p className="payment-cta__title">Для оплаты свяжитесь с нами:</p>
+                            <a
+                                href="https://t.me/+79661136344"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="payment-cta__telegram">
+                                ✈ Написать в Telegram
+                            </a>
+                            <a href="tel:+79661136344" className="payment-cta__phone">
+                                📞 +7 966 113-63-44
+                            </a>
+                            <p className="payment-cta__warning">
+                                ⏳ Даты временно забронированы. Если оплата не поступит в течение 24 часов,
+                                бронь будет автоматически отменена.
+                            </p>
+                        </div>
 
                         <div className="confirm-details">
                             {[
@@ -592,7 +637,7 @@ function BookingPage() {
                                 { label: "Выезд", value: formatDate(checkOut) },
                                 { label: "Ночей", value: price?.nights },
                                 { label: "Итого", value: `${formatPrice(price?.totalPrice)} ₽` },
-                                { label: "Предоплата", value: `${formatPrice(price?.prepayment)} ₽` },
+                                { label: "Залог", value: `${formatPrice(price?.deposit)} ₽ (возвращается)` },
                             ].map((row, i) => (
                                 <div key={i} className="confirm-row">
                                     <span>{row.label}</span>
@@ -601,7 +646,6 @@ function BookingPage() {
                             ))}
                         </div>
 
-                        {/* FIX: кнопка «Новое бронирование» */}
                         <button
                             onClick={handleNewBooking}
                             className="btn-primary"

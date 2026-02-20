@@ -189,15 +189,18 @@ router.get("/settings", requireAuth, async (req, res) => {
 // ===== Сохранить настройки =====
 router.put("/settings", requireAuth, async (req, res) => {
     try {
-        const settings = req.body // { base_price: 15000, guest_surcharge: 500, ... }
+        const settings = req.body
 
         // Валидация: разрешаем только известные ключи
         const allowedKeys = [
-            "base_price",
+            "weekday_price",
+            "weekend_price",
             "guest_surcharge",
             "included_guests",
-            "prepay_percent",
             "max_guests",
+            "deposit",
+            "cleaning_fee",
+            "pending_cancel_hours",
         ]
 
         for (const [key, value] of Object.entries(settings)) {
