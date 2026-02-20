@@ -283,4 +283,19 @@ router.delete("/blocked-dates/:date", requireAuth, async (req, res) => {
     }
 })
 
+const { getSyncStatus, syncFromAvito } = require("../avito-sync")
+
+router.get("/avito-sync/status", requireAuth, (req, res) => {
+    res.json(getSyncStatus())
+})
+
+router.post("/avito-sync/trigger", requireAuth, async (req, res) => {
+    try {
+        const result = await syncFromAvito()
+        res.json({ ok: true, result })
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+})
+
 module.exports = router

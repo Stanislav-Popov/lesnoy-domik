@@ -33,6 +33,9 @@ app.use("/api/bookings", require("./routes/bookings"))
 app.use("/api/settings", require("./routes/settings"))
 app.use("/api/admin", require("./routes/admin"))
 
+// === НОВОЕ: iCal экспорт для Авито ===
+app.use("/api/calendar", require("./routes/ical-export"))
+
 // ===== РАЗДАЧА ФРОНТЕНДА =====
 app.use(express.static(path.join(__dirname, "../client/build")))
 
@@ -44,4 +47,8 @@ app.get("/{*path}", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`🚀 Сервер запущен: http://localhost:${PORT}`)
+
+    // === НОВОЕ: Запуск синхронизации с Авито ===
+    const { startSync } = require("./avito-sync")
+    startSync()
 })
