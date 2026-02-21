@@ -5,7 +5,7 @@ set -e
 
 echo "📦 Устанавливаю зависимости клиента..."
 cd client
-npm install
+npm install --legacy-peer-deps
 
 echo "🔨 Собираю React-приложение..."
 npm run build
