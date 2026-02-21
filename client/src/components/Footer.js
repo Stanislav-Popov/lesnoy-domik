@@ -43,11 +43,6 @@ function Footer() {
                 </Link>
             </div>
 
-            {/* Реквизиты */}
-            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginBottom: 8, lineHeight: 1.6 }}>
-                ИП [ФИО] · ИНН [номер] · ОГРНИП [номер]
-            </p>
-
             {/* Контакты */}
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginBottom: 16, lineHeight: 1.6 }}>
                 Тел.:{" "}
