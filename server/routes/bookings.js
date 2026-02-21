@@ -149,8 +149,6 @@ router.post("/calculate", async (req, res) => {
 
 // ===== Создать бронирование =====
 router.post("/", async (req, res) => {
-    const client = await pool.connect()
-
     try {
         const { guestName, phone, guestCount, checkIn, checkOut, comment } = req.body
 
@@ -178,6 +176,7 @@ router.post("/", async (req, res) => {
             return res.status(400).json({ error: "Некорректные даты" })
         }
 
+        const client = await pool.connect()
         await client.query("BEGIN")
 
         const settings = await loadSettings(client)

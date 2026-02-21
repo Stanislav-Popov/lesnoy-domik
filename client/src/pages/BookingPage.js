@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import SEO from '../components/SEO';
+import SEO from "../components/SEO"
 import "./BookingPage.css"
 
 // Названия месяцев и дней на русском

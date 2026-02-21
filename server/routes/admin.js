@@ -142,32 +142,35 @@ router.patch("/bookings/:id", requireAuth, async (req, res) => {
 
 // ===== Удалить бронирование =====
 router.delete("/bookings/:id", requireAuth, async (req, res) => {
+    const client = await pool.connect()
     try {
         const { id } = req.params
-
         if (!isValidUUID(id)) {
             return res.status(400).json({ error: "Некорректный ID бронирования" })
         }
 
-        // Проверяем, что бронирование существует и отменено
-        const check = await pool.query("SELECT status FROM bookings WHERE id = $1", [id])
+        await client.query("BEGIN")
+
+        const check = await client.query("SELECT status FROM bookings WHERE id = $1 FOR UPDATE", [id])
         if (check.rows.length === 0) {
+            await client.query("ROLLBACK")
             return res.status(404).json({ error: "Бронирование не найдено" })
         }
         if (check.rows[0].status !== "CANCELLED") {
+            await client.query("ROLLBACK")
             return res.status(400).json({ error: "Удалить можно только отменённое бронирование" })
         }
 
-        // Удаляем связанные заблокированные даты (на всякий случай)
-        await pool.query("DELETE FROM blocked_dates WHERE booking_id = $1", [id])
-
-        // Удаляем бронирование
-        await pool.query("DELETE FROM bookings WHERE id = $1", [id])
-
+        await client.query("DELETE FROM blocked_dates WHERE booking_id = $1", [id])
+        await client.query("DELETE FROM bookings WHERE id = $1", [id])
+        await client.query("COMMIT")
         res.json({ ok: true })
     } catch (err) {
+        await client.query("ROLLBACK")
         console.error("Ошибка удаления бронирования:", err)
         res.status(500).json({ error: "Ошибка сервера" })
+    } finally {
+        client.release()
     }
 })
 
