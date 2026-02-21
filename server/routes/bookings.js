@@ -9,7 +9,12 @@
 const express = require("express")
 const router = express.Router()
 const pool = require("../db")
-const { sendBookingNotification, sendPendingWarning } = require("../telegram")
+const {
+    sendBookingNotification,
+    sendPendingWarning,
+    sendCancelledNotification,
+    sendPendingReminder,
+} = require("../telegram")
 
 // ===== Вспомогательная: загрузка настроек =====
 async function loadSettings(client) {
@@ -248,8 +253,23 @@ router.post("/", async (req, res) => {
         // Уведомление администратору о новом бронировании
         sendBookingNotification(booking)
 
-        // Уведомление: даты забронированы, но не оплачены + предупреждение об автоотмене
-        sendPendingWarning(booking, settings.pendingCancelHours)
+        // Напоминание через 8 часов, если оплата не поступит
+        const remindMs = 8 * 60 * 60 * 1000 // 8 часов в миллисекундах
+        const bookingId = booking.id
+        setTimeout(async () => {
+            try {
+                // Проверяем, что бронь всё ещё PENDING
+                const check = await pool.query(
+                    "SELECT id, guest_name, phone, check_in, check_out FROM bookings WHERE id = $1 AND status = 'PENDING'",
+                    [bookingId],
+                )
+                if (check.rows.length > 0) {
+                    sendPendingReminder(check.rows[0], settings.pendingCancelHours)
+                }
+            } catch (err) {
+                console.error("Ошибка отправки напоминания:", err)
+            }
+        }, remindMs)
 
         res.json({
             booking,
@@ -275,7 +295,7 @@ async function cancelExpiredPendingBookings() {
 
         // Находим PENDING бронирования старше N часов
         const expired = await pool.query(
-            `SELECT id, guest_name, check_in, check_out FROM bookings
+            `SELECT id, guest_name, phone, check_in, check_out FROM bookings
              WHERE status = 'PENDING'
              AND created_at < NOW() - INTERVAL '1 hour' * $1`,
             [hours],
@@ -289,6 +309,9 @@ async function cancelExpiredPendingBookings() {
                 await client.query("UPDATE bookings SET status = 'CANCELLED' WHERE id = $1", [booking.id])
                 await client.query("COMMIT")
                 console.log(`⏰ Автоотмена PENDING бронирования: ${booking.guest_name} (${booking.id})`)
+
+                // Уведомление в Telegram об автоотмене
+                sendCancelledNotification(booking)
             } catch (err) {
                 await client.query("ROLLBACK")
                 console.error("Ошибка автоотмены:", err)

@@ -95,4 +95,42 @@ async function sendPendingWarning(booking, cancelHours) {
     await sendTelegramMessage(message)
 }
 
-module.exports = { sendBookingNotification, sendPendingWarning }
+// ===== Уведомление: бронь автоматически отменена =====
+async function sendCancelledNotification(booking) {
+    const message = [
+        "❌ *Бронирование автоматически отменено*",
+        "",
+        `👤 ${escapeMarkdown(booking.guest_name)}`,
+        `📞 ${escapeMarkdown(booking.phone || "")}`,
+        `📅 ${escapeMarkdown(formatDate(booking.check_in))} — ${escapeMarkdown(formatDate(booking.check_out))}`,
+        "",
+        `Причина: предоплата не поступила в установленный срок\\.`,
+        `Даты снова доступны для бронирования\\.`,
+    ].join("\n")
+
+    await sendTelegramMessage(message)
+}
+
+// ===== Напоминание: предоплата не поступила (отправляется через 8 часов) =====
+async function sendPendingReminder(booking, cancelHours) {
+    const remainingHours = Math.max(0, cancelHours - 8)
+    const message = [
+        "🔔 *Напоминание: предоплата не поступила*",
+        "",
+        `👤 ${escapeMarkdown(booking.guest_name)}`,
+        `📞 ${escapeMarkdown(booking.phone || "")}`,
+        `📅 ${escapeMarkdown(formatDate(booking.check_in))} — ${escapeMarkdown(formatDate(booking.check_out))}`,
+        "",
+        `⏰ Прошло 8 часов с момента бронирования\\.`,
+        remainingHours > 0
+            ? `Бронь будет *автоматически отменена* через *${escapeMarkdown(String(remainingHours))} ч*, если оплата не поступит\\.`
+            : `Бронь будет *отменена в ближайшее время*, если оплата не поступит\\.`,
+        "",
+        `Подтвердите оплату в админ\\-панели или отмените бронирование\\.`,
+        `Ссылка на админ панель`,
+    ].join("\n")
+
+    await sendTelegramMessage(message)
+}
+
+module.exports = { sendBookingNotification, sendPendingWarning, sendCancelledNotification, sendPendingReminder }
