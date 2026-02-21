@@ -43,6 +43,10 @@ app.get("/{*path}", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"))
 })
 
+// ===== SEO =====
+const prerenderMiddleware = require('./prerender-middleware');
+app.use(prerenderMiddleware);
+
 // ===== ЗАПУСК =====
 
 app.listen(PORT, () => {

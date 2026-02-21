@@ -16,6 +16,9 @@
         "express": "^5.2.1",
         "node-fetch": "^2.7.0",
         "pg": "^8.18.0",
+        "prerender-node": "^3.8.3",
+        "prerender-spa-plugin": "^3.4.0",
+        "react-helmet-async": "^2.0.5",
         "uuid": "^13.0.0"
     }
 }
