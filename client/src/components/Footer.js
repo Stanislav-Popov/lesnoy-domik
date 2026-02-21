@@ -52,7 +52,7 @@ function Footer() {
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginBottom: 16, lineHeight: 1.6 }}>
                 Тел.:{" "}
                 <a href="tel:+79991234567" style={{ color: "rgba(255,255,255,0.45)" }}>
-                    +7 (999) 123-45-67
+                    +7 915 366 37 35
                 </a>{" "}
                 · Email:{" "}
                 <a href="mailto:info@lesnoy-domik.ru" style={{ color: "rgba(255,255,255,0.45)" }}>

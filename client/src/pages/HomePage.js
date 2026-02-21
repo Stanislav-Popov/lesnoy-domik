@@ -317,7 +317,11 @@ function HomePage() {
                         <div className="contact-card">
                             <div className="contact-card__icon">📞</div>
                             <div className="contact-card__label">Телефон</div>
-                            <strong>+7 915 366 37 35</strong>
+                            <strong>
+                                <a href="tel:+79991234567" style={{ color: "black", textDecoration: "none" }}>
+                                    +7 915 366 37 35
+                                </a>
+                            </strong>
                         </div>
                         <div className="contact-card">
                             <div className="contact-card__icon">✈️</div>
