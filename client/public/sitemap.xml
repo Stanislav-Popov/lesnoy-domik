@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <url>
+    <loc>https://lesnoy-domik.ru/</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://lesnoy-domik.ru/images/house-1.webp</image:loc>
+      <image:title>Загородный дом Лесной домик — вид снаружи</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://lesnoy-domik.ru/images/living-room-1.webp</image:loc>
+      <image:title>Просторная гостиная на 60 человек</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://lesnoy-domik.ru/booking</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://lesnoy-domik.ru/gallery</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://lesnoy-domik.ru/images/badroom-1.webp</image:loc>
+      <image:title>Спальня в загородном доме</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://lesnoy-domik.ru/images/grill-1.webp</image:loc>
+      <image:title>Русская баня при загородном доме</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://lesnoy-domik.ru/images/grill-3.webp</image:loc>
+      <image:title>Терраса и зона барбекю</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://lesnoy-domik.ru/privacy</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lesnoy-domik.ru/offer</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+</urlset>

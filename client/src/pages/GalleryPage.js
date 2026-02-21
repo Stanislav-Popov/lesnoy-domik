@@ -1,100 +1,31 @@
 /** @format */
 
 import React, { useState, useEffect, useCallback } from "react"
+import SEO from "../components/SEO"
 import "./GalleryPage.css"
 
 // Фото-заглушки (замените на свои позже)
 const PHOTOS = [
-    {
-        id: 1,
-        cat: "interior",
-        url: "/images/badroom-1.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 2,
-        cat: "interior",
-        url: "/images/badroom-2.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 3,
-        cat: "interior",
-        url: "/images/hallway-1.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 4,
-        cat: "interior",
-        url: "/images/kitchen-1.webp",
-        alt: "Гостиная",
-    },
+    { id: 1, cat: "interior", url: "/images/badroom-1.webp", alt: "Спальня в загородном доме Лесной домик" },
+    { id: 2, cat: "interior", url: "/images/badroom-2.webp", alt: "Вторая спальня — двуспальная кровать" },
+    { id: 3, cat: "interior", url: "/images/hallway-1.webp", alt: "Холл и лестница на второй этаж" },
+    { id: 4, cat: "interior", url: "/images/kitchen-1.webp", alt: "Оборудованная кухня загородного дома" },
     {
         id: 5,
         cat: "interior",
         url: "/images/living-room-1.webp",
-        alt: "Гостиная",
+        alt: "Гостиная с большим столом на 60 гостей",
     },
-    {
-        id: 6,
-        cat: "interior",
-        url: "/images/living-room-2.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 7,
-        cat: "interior",
-        url: "/images/living-room-3.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 8,
-        cat: "interior",
-        url: "/images/room-1.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 9,
-        cat: "interior",
-        url: "/images/wc-2.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 10,
-        cat: "interior",
-        url: "/images/grill-2.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 11,
-        cat: "interior",
-        url: "/images/porch-1.webp",
-        alt: "Гостиная",
-    },
-    {
-        id: 12,
-        cat: "exterior",
-        url: "/images/house-1.webp",
-        alt: "Дом снаружи",
-    },
-    {
-        id: 13,
-        cat: "exterior",
-        url: "/images/house-2.webp",
-        alt: "Дом снаружи",
-    },
-    {
-        id: 14,
-        cat: "exterior",
-        url: "/images/grill-1.webp",
-        alt: "Дом снаружи",
-    },
-    {
-        id: 15,
-        cat: "exterior",
-        url: "/images/grill-3.webp",
-        alt: "Дом снаружи",
-    },
+    { id: 6, cat: "interior", url: "/images/living-room-2.webp", alt: "Зона отдыха с караоке и телевизором" },
+    { id: 7, cat: "interior", url: "/images/living-room-3.webp", alt: "Просторная гостиная — вид от входа" },
+    { id: 8, cat: "interior", url: "/images/room-1.webp", alt: "Комната отдыха с настольным теннисом" },
+    { id: 9, cat: "interior", url: "/images/wc-2.webp", alt: "Санузел загородного дома" },
+    { id: 10, cat: "interior", url: "/images/grill-2.webp", alt: "Зона барбекю и мангал на участке" },
+    { id: 11, cat: "interior", url: "/images/porch-1.webp", alt: "Балкон загородного дома с видом на лес" },
+    { id: 12, cat: "exterior", url: "/images/house-1.webp", alt: "Загородный дом Лесной домик — фасад" },
+    { id: 13, cat: "exterior", url: "/images/house-2.webp", alt: "Вид на дом с участка — зимой" },
+    { id: 14, cat: "exterior", url: "/images/grill-1.webp", alt: "Баня и зона отдыха на участке" },
+    { id: 15, cat: "exterior", url: "/images/grill-3.webp", alt: "Терраса с зоной барбекю" },
 ]
 
 const CATEGORIES = [
@@ -140,6 +71,12 @@ function GalleryPage() {
 
     return (
         <main className="gallery-page">
+            <SEO
+                title="Фото загородного дома — интерьер, участок, баня"
+                description="Фотографии загородного дома «Лесной домик»: 6 спален, просторная гостиная на 60 человек, русская баня, зона барбекю, природа."
+                canonical="/gallery"
+            />
+
             <div className="container">
                 <h1 className="section-title">Галерея</h1>
                 <p className="section-subtitle">Рассмотрите каждый уголок нашего дома</p>

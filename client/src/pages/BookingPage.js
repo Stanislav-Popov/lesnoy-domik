@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import SEO from '../components/SEO';
 import "./BookingPage.css"
 
 // Названия месяцев и дней на русском
@@ -296,6 +297,12 @@ function BookingPage() {
 
     return (
         <main className="booking-page">
+            <SEO
+                title="Забронировать загородный дом — онлайн бронирование"
+                description="Онлайн-бронирование загородного дома «Лесной домик» — выберите даты, узнайте стоимость и забронируйте за 2 минуты. Посуточная аренда от ₽XX XXX."
+                canonical="/booking"
+            />
+
             <div className="container booking-container">
                 <h1 className="section-title">Бронирование</h1>
                 <p className="section-subtitle">Выберите даты и забронируйте «Лесной домик»</p>
